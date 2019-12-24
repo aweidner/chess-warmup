@@ -17,6 +17,9 @@ logger = logging.getLogger(__name__)
 
 PUZZLE_REGEX = re.compile(r"lichess.puzzle = (.*?)</script>")
 URL = "https://lichess.org/training"
+HEADERS = {
+    'User-Agent': 'My User Agent 1.0',
+}
 
 
 parser = argparse.ArgumentParser("Fetch database of lichess tactics between particular range")
@@ -35,7 +38,7 @@ def get_conn():
 
 
 def fetch_tactic_data(tactic_id):
-    result = requests.get(f"{URL}/{tactic_id}")
+    result = requests.get(f"{URL}/{tactic_id}", headers=HEADERS)
     matched_group = PUZZLE_REGEX.search(result.text).group(1)
     matched_json = json.loads(matched_group)
     return matched_json["data"]
